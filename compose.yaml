@@ -45,5 +45,20 @@ services:
       postgres:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:8082:80"
+
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
