@@ -1,7 +1,7 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { useState } from 'react';
 import api from '../services/api';
 
-const AuthContext = createContext(null);
+import { AuthContext } from './AuthContextValue';
 const storageKey = 'blossom_user';
 const tokenKey = 'blossom_token';
 
@@ -40,12 +40,6 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  const value = useMemo(() => ({ user, login, register, logout, isAuthenticated: !!user }), [user]);
+  const value = { user, login, register, logout, isAuthenticated: !!user };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth debe usarse dentro de AuthProvider');
-  return ctx;
 }

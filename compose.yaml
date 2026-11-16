@@ -1,0 +1,49 @@
+
+services:
+
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: blossom_docker
+      POSTGRES_USER: blossom_user
+      POSTGRES_PASSWORD: ${BLOSSOM_DB_PASSWORD:?Define BLOSSOM_DB_PASSWORD}
+
+    ports:
+      - "127.0.0.1:5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U blossom_user -d blossom_docker
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/blossom_docker
+      SPRING_DATASOURCE_USERNAME: blossom_user
+      SPRING_DATASOURCE_PASSWORD: ${BLOSSOM_DB_PASSWORD:?Define BLOSSOM_DB_PASSWORD}
+      JWT_SECRET: ${BLOSSOM_JWT_SECRET:?Define BLOSSOM_JWT_SECRET}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+    ports:
+      - "127.0.0.1:8081:8080"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

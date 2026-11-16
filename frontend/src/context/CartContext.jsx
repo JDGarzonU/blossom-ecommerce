@@ -1,6 +1,6 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { useState } from 'react';
 
-const CartContext = createContext(null);
+import { CartContext } from './CartContextValue';
 const key = 'blossom_cart';
 function getInitialCart() {
   try {
@@ -29,12 +29,6 @@ export function CartProvider({ children }) {
   function clear() { update([]); }
   const count = items.reduce((s, i) => s + i.quantity, 0);
   const total = items.reduce((s, i) => s + Number(i.price) * i.quantity, 0);
-  const value = useMemo(() => ({ items, add, changeQuantity, remove, clear, count, total }), [items, count, total]);
+  const value = { items, add, changeQuantity, remove, clear, count, total };
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
-}
-
-export function useCart() {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error('useCart debe usarse dentro de CartProvider');
-  return ctx;
 }

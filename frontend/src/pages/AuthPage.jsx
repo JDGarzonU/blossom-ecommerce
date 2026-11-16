@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LockKeyhole, UserRound, Mail, ArrowRight } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { getErrorMessage } from '../services/api';
 export default function AuthPage({ mode }) {
   const isRegister = mode === 'register'; const navigate=useNavigate(); const {login,register}=useAuth();

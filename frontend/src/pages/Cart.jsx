@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from 'lucide-react';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/useCart';
+import { useAuth } from '../context/useAuth';
 import api, { getErrorMessage } from '../services/api';
 import { money } from '../utils';
 export default function Cart() {

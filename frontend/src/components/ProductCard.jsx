@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCart, ArrowUpRight } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import { money } from '../utils';
 
 export default function ProductCard({ product }) {

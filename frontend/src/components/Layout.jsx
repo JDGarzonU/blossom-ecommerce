@@ -1,7 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { ShoppingBag, ShoppingCart, LogIn, LogOut, Package, UserRound } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/useAuth';
+import { useCart } from '../context/useCart';
 
 export default function Layout() {
   const { user, logout } = useAuth();
