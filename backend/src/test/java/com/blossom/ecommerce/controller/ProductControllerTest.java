@@ -133,4 +133,56 @@ class ProductControllerTest {
 
         verify(productService).create(any());
     }
+    
+    @Test
+    void shouldUpdateProduct() throws Exception {
+        when(productService.update(eq(1L), any()))
+                .thenReturn(product());
+
+        String json = """
+            {
+              "name": "Teclado Mecánico RGB",
+              "description": "Teclado actualizado",
+              "price": 189900.00,
+              "category": "Perifericos",
+              "stock": 15
+            }
+            """;
+
+        mockMvc.perform(put("/api/products/1")
+                        .contentType("application/json")
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1));
+
+        verify(productService).update(eq(1L), any());
+    }
+
+    @Test
+    void shouldRejectProductWithNegativeStock() throws Exception {
+        String json = """
+            {
+              "name": "Teclado Mecánico RGB",
+              "price": 189900.00,
+              "category": "Perifericos",
+              "stock": -1
+            }
+            """;
+
+        mockMvc.perform(post("/api/products")
+                        .contentType("application/json")
+                        .content(json))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(productService);
+    }
+
+    @Test
+    void shouldRejectMissingProductBody() throws Exception {
+        mockMvc.perform(put("/api/products/1")
+                        .contentType("application/json"))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(productService);
+    }
 }
